@@ -42,7 +42,7 @@ class Help:
         partner.help_button.config(state=DISABLED)
 
         # Set up child window (ie: help box)
-        self.help_box = Toplevel(1)
+        self.help_box = Toplevel()
 
         # Set up GUI Frame
         self.help_frame = Frame(self.help_box, width=300, bg="yellow")

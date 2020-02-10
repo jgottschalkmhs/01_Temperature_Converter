@@ -37,7 +37,41 @@ class Converter:
                                       font=("arial 20 bold"))
         self.to_convert_entry.grid(row=2)
 
-        # conversion buttons fram (row 3)
+        # conversion buttons frame (row 3) ,orchid3 | khakil
+        self.converter_buttons_frame = Frame(self.converter_frame)
+        self.converter_buttons_frame.grid(rows=3, pady=30)
+
+        self.to_c_button = Button(self.converter_buttons_frame,
+                                  text = "To Centigrade",
+                                  font = ("arial 20 bold"),
+                                  fg = "red", bg = "khaki",
+                                  padx = 10, pady = 10)
+        self.to_c_button.grid(row=0, column=0)
+
+        self.to_f_button = Button(self.converter_buttons_frame,
+                                  text="To Fahreneit", font="Arial 20 bold",
+                                  bg="orchid", padx=10, pady=10)
+        self.to_f_button.grid(row=0, column=1)
+
+        # Answer label (row 4)
+        self.Answer_buttons_frame = Frame(self.converter_frame)
+        self.Answer_buttons_frame.grid(rows=3, pady=50, padx=60)
+
+        self.Answer_buttons = Button (self.converter_frame,
+                                      text="Answer", font="Arial 20 bold",
+                                      bg="pink", padx=10, pady=10)
+        self.Answer_buttons.grid(row=6)
+
+        # History / Help button frame (row 5)
+        self.History_buttons_frame = Frame(self.converter_frame)
+        self.History_buttons_frame.grid(rows=3, pady=10, padx=10)
+
+        self.History_buttons = Button(self.converter_frame,
+                                     text="History", font="Arial 20 bold",
+                                     bg="purple", padx=10, pady=10)
+        self.History_buttons.grid(row=6)
+
+
 
 # main routine
 if __name__ == "__main__":

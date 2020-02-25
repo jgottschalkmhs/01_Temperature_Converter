@@ -22,7 +22,7 @@ class Converter:
                                           text="Temperature Converter",
                                           font=("arial 20 bold"),
                                           fg="Black", bg=background_color,
-                                          padx=50, pady=80)
+                                          padx=50, pady=20)
 
         self.temp_converter_label.grid(row=0)
 
@@ -36,8 +36,8 @@ class Converter:
         self.temp_instructions_label.grid(row=1)
 
         # temperture entry box (row2)
-        self.to_convert_entry = Entry(self.converter_frame,width=50,
-                                      font= ("arial 10 bold"))
+        self.to_convert_entry = Entry(self.converter_frame,width=30,
+                                      font= ("arial 15 bold"))
         self.to_convert_entry.grid(row=2)
 
         # conversion buttons frame (row 3) ,orchid3 | khakil
@@ -65,32 +65,30 @@ class Converter:
                                       bg=background_color, padx=10, pady=10)
         self.converted_label.grid(row=4)
 
-        # History / Help button frame (row 5)
-        self.History_buttons_frame = Frame(self.converter_frame)
-        self.History_buttons_frame.grid(rows=5, pady=10, padx=10)
+        # history / Help button frame (row 5)
+        self.history_buttons_frame = Frame(self.converter_frame)
+        self.history_buttons_frame.grid(rows=5, pady=10, padx=10)
 
-        # History button
-        self.History_buttons = Button(self.History_buttons_frame,
-                                      text="History", font="Arial 10 bold",
+        # history button
+        self.history_buttons = Button(self.history_buttons_frame,
+                                      text="history", font="Arial 10 bold",
                                       command=lambda: self.history(self.all_calc_list),
                                       bg="#4D8889",fg="#F7FBFD", padx=10, pady=10)
-        self.History_buttons.grid(row=0,column=0)
+        self.history_buttons.grid(row=0, column=0)
 
         if len(self.all_calc_list) == 0:
-            self.History_buttons.config(state=DISABLED)
+            self.history_buttons.config(state=DISABLED)
 
         # Help Button
-        self.help_button = Button(self.History_buttons_frame,
+        self.help_button = Button(self.history_buttons_frame,
                                   text="help",font="arial 10 bold",bg="#4D8889",
                                   fg="#F7FBFD",padx=10, pady=10, command=self.help)
-        self.help_button.grid(row=0, column=1 )
+        self.help_button.grid(row=0, column=1)
 
     def help(self):
         print("you need help")
         get_help = Help(self)
-        get_help.help_text.configure(text="you fix it by getting of my app")
-
-
+        get_help.help_text.configure(text="you fix it by getting off my app")
 
     def temp_convert(self, low):
         print(low)
@@ -120,8 +118,8 @@ class Converter:
 
             else:
                 # input is invalid
-                answer = " Too cold "
-                has_error = " yes "
+                answer = "Too cold"
+                has_error = "yes"
 
             # Display answer
             if has_error == "no":
@@ -131,10 +129,10 @@ class Converter:
                 self.converted_label.configure(text=answer, fg="red")
                 self.to_convert_entry.configure(bg=error)
 
-            # Add Answer to list for History
-            if answer != "Too Cold":
+            # Add Answer to list for history
+            if has_error != "yes":
                 self.all_calc_list.append(answer)
-                print(self.all_calc_list)
+                self.history_buttons.config(state=NORMAL)
 
         except ValueError:
             self.converted_label.configure(text="enter a number", fg="red")
@@ -144,9 +142,12 @@ class Converter:
         if to_round % 1 == 0:
             rounded = int(to_round)
         else:
-            rounded = (to_round)
-
+            rounded = round(to_round, 1)
         return rounded
+
+    def history(self, calc_history):
+        History(self, calc_history)
+
 
 class Help:
     def __init__(self, partner):
@@ -183,10 +184,82 @@ class Help:
         self.help_box.destroy()
 
 
+class History:
+    def __init__(self, partner, calc_history):
+
+        background = "#52ACD1"
+
+        # disable history button
+        partner.history_buttons.config(state=DISABLED)
+
+        # Set up child window (ie: history box)
+        self.history_box = Toplevel()
+
+        # Set up GUI Frame
+        self.history_frame = Frame(self.history_box, width=300, bg="#52ACD1")
+        self.history_frame.grid()
+
+        # Set up history heading (row 0)
+        self.how_heading = Label(self.history_frame,
+                                 text="Calculation history ",
+                                 font="arial 20 bold",bg="#52ACD1")
+        self.how_heading.grid(row=0)
+
+        # history text (label, row 1)
+        self.history_text = Label(self.history_frame,
+                               text="to much to write",
+                               justify=LEFT,width=50, bg="#52ACD1",wrap=200)
+        self.history_text.grid(column=0,row=1)
+
+        # history output goes here...
+
+        # Generate string from list of calculation...
+        history_string = ""
+
+        if len(calc_history) >= 7:
+            for item in range(0,7):
+                history_string += calc_history[len(calc_history)
+                                                - item - 1]+"\n"
+
+
+        else:
+            for item in calc_history:
+                history_string += calc_history[len(calc_history)-
+                                               calc_history.index(item)-1] + "\n"
+                self.history_text.config(text="Here is your calculation "
+                                         "history. You can use the "
+                                         "export button to save this "
+                                         "data to a text file if "
+                                         "desired.",  font="arial 12 italic")
+
+        # Lable to display calculation history to user
+        self.calc_history = Label(self.history_frame, text=history_string,
+                                  bg=background, font="arial 12 bold", justify=LEFT)
+        self.calc_history.grid(row=2)
+
+        # Export / dismiss Button Frame
+        self.export_dismiss_frame = Frame(self.history_frame)
+        self.export_dismiss_frame.grid(row=3)
+
+        # Export Button
+        self.export_button = Button(self.export_dismiss_frame, text="export",
+                                    font="arial 12 bold",bg="#4D8889", fg="#F7FBFD",)
+        self.export_button.grid(row=0, column=0)
+
+        # dismiss Button
+        self.dismiss_button = Button(self.export_dismiss_frame, text="Dismiss",
+                                    font="arial 12 bold",bg="#4D8889", fg="#F7FBFD",
+                                     command=partial(self.close_history, partner))
+        self.dismiss_button.grid(row=0, column=1)
+
+    def close_history(self, partner):
+        # Put history button back to normal
+        partner.history_buttons.config(state=NORMAL)
+        self.history_box.destroy()
+
 # main routine
 if __name__ == "__main__":
     root = Tk()
-    root.title("Temperature Converter")
+    root.title("temp con")
     something = Converter()
     root.mainloop()
-
